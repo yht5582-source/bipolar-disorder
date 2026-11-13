@@ -30,4 +30,9 @@ test('匯入拒絕不可能日期與超範圍',()=>{assert.throws(()=>C.validate
 test('拒絕重複日期與未附檢驗日的濃度',()=>{assert.throws(()=>C.validateRecord(rec({lithium:'0.7'})));assert.throws(()=>C.validateBackup({schema:1,state:C.defaults(),records:[rec(),rec()]}))});
 test('有效備份可還原，關閉本機儲存',()=>assert.equal(C.validateBackup({schema:1,state:make({persist:true}),records:[rec()]}).state.persist,false));
 test('跨年回評日期正確',()=>assert.equal(C.plus('2026-12-29',7),'2027-01-05'));
+test('混合情境須先確認發作條件',()=>{assert.ok(C.treatment(make({stage:'mixed',core:'none',m:[],days:''}),true).stop.some(x=>x.includes('混合')));assert.equal(C.treatment(make({stage:'mixed'}),true).stop.length,0)});
+test('高齡與生育規劃加上安全提醒',()=>{assert.ok(C.treatment(make({age:70}),true).warnings.some(x=>x.includes('65')));assert.ok(C.treatment(make({pregnancy:'planning'}),true).warnings.some(x=>x.includes('valproate')))});
+test('既往有效藥未列候選時說明不自行停藥',()=>assert.ok(C.treatment(dep({prior:'lithium',egfr:40}),true).warnings.some(x=>x.includes('未列本次候選'))));
+test('鋰濃度高於維持目標提醒，達毒性門檻不重複',()=>{assert.ok(C.alerts(rec({lithium:'1.2',labDate:C.today()})).some(x=>x.includes('>1.0')));const a=C.alerts(rec({lithium:'1.6',labDate:C.today()}));assert.ok(a.some(x=>x.includes('1.5')));assert.equal(a.some(x=>x.includes('>1.0')),false);assert.equal(C.alerts(rec({lithium:'0.7',labDate:C.today()})).length,0)});
+test('摘要標籤涵蓋所有選單值',()=>{for(const v of ['','up','depression','mixed','stable'])assert.ok(C.labels.stage[v]);for(const v of ['unknown','none','thought','plan','intent'])assert.ok(C.labels.risk[v])});
 console.log(`${passed} clinical/data tests passed.`);

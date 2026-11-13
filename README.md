@@ -35,6 +35,9 @@
 - I 型抗憂鬱藥不可單方；II 型非混合鬱期的特定選項由專科評估，本工具不自動推薦。
 - Valproate 只列專科替代選項及安全說明。MHRA 生育限制為英國規範，不代表台灣法規。
 - 劑量屬教育參考，須核對製劑、肝腎、交互作用、耐受及當地仿單。尚未逐項核實台灣 TFDA 適應症、可近性及健保給付，不能據此判定給付資格。
+- 混合情境須先確認躁／輕躁或重鬱發作條件；≥65 歲、可能懷孕或計畫生育，以及既往有效藥未列候選時，會加上安全提醒。
+- 治療頁修改腎肝功能、交互作用等欄位不會取消診斷確認；「更新」按鈕不能略過診斷確認。
+- 鋰濃度 >1.0 mmol/L 提醒聯絡團隊，≥1.5 列疑似毒性。最近一筆追蹤有警訊時，回評日期改為隔日。
 - 自評 −3 至 +3、服藥 <80% 及回評 7／30 日是本工具工作流程預設，非經驗證的自動分流規則。沒有觸發警訊不代表無風險。
 
 ## 隱私與保存
@@ -53,13 +56,13 @@ TXT、CSV、JSON 下載至使用者裝置，須依院內資訊安全規範保護
 - `docs/style.css`：響應式介面。
 - `docs/core.js`：臨床規則、病例、資料驗證。
 - `docs/app.js`：互動、追蹤、匯入匯出。
-- `tests/clinical.test.cjs`：28 項臨床／資料情境測試。
+- `tests/clinical.test.cjs`：33 項臨床／資料情境測試。
 
 GitHub Pages：Deploy from a branch → `main` → `/docs`。
 
 本機預覽：`python3 -m http.server 8000 --directory docs`，開啟 `http://localhost:8000`。
 
-測試：`node tests/clinical.test.cjs`。
+測試：`node tests/clinical.test.cjs`（無 node 時可用 macOS JavaScriptCore `jsc` 搭配簡易 require 墊片執行）。
 
 ## 臨床驗證狀態
 
