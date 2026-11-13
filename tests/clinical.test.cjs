@@ -35,4 +35,5 @@ test('高齡與生育規劃加上安全提醒',()=>{assert.ok(C.treatment(make({
 test('既往有效藥未列候選時說明不自行停藥',()=>assert.ok(C.treatment(dep({prior:'lithium',egfr:40}),true).warnings.some(x=>x.includes('未列本次候選'))));
 test('鋰濃度高於維持目標提醒，達毒性門檻不重複',()=>{assert.ok(C.alerts(rec({lithium:'1.2',labDate:C.today()})).some(x=>x.includes('>1.0')));const a=C.alerts(rec({lithium:'1.6',labDate:C.today()}));assert.ok(a.some(x=>x.includes('1.5')));assert.equal(a.some(x=>x.includes('>1.0')),false);assert.equal(C.alerts(rec({lithium:'0.7',labDate:C.today()})).length,0)});
 test('摘要標籤涵蓋所有選單值',()=>{for(const v of ['','up','depression','mixed','stable'])assert.ok(C.labels.stage[v]);for(const v of ['unknown','none','thought','plan','intent'])assert.ok(C.labels.risk[v])});
+test('I 型穩定期嗜睡／代謝偏好優先 aripiprazole，II 型仍為 lamotrigine',()=>{const st=o=>make({stage:'stable',core:'none',m:[],days:'',avoidSedation:true,...o});assert.equal(C.treatment(st(),true).candidates[0],'aripiprazole');assert.equal(C.treatment(st({history:'II'}),true).candidates[0],'lamotrigine');assert.equal(C.treatment(st({prior:'lithium'}),true).candidates[0],'lithium')});
 console.log(`${passed} clinical/data tests passed.`);
